@@ -1,0 +1,36 @@
+env:
+  BUILDKITE_CLEAN_CHECKOUT: "true"
+
+steps:
+  - label: ":terraform: Validate"
+    commands:
+      - "terraform fmt -check -diff -recursive"
+      - "terraform init -backend=false"
+      - "terraform validate"
+    plugins:
+      - docker#v3.8.0:
+          image: "hashicorp/terraform:1.5.7"
+          workdir: "/code"
+
+  - label: ":construction: Plan"
+    commands:
+      - "echo 'Terraform plan would be run here in actual CI/CD pipeline'"
+      - "echo 'This module requires backend configuration and AWS credentials'"
+    if: build.branch != "main"
+
+  - label: ":rocket: Apply"
+    commands:
+      - "echo 'Terraform apply would be run here in actual CI/CD pipeline'"
+      - "echo 'This module requires backend configuration and AWS credentials'"
+    if: build.branch == "main"
+    depends_on: 
+      - "validate"
+
+  - label: ":memo: Documentation"
+    commands:
+      - "terraform-docs markdown . > README.md"
+      - "git diff --exit-code README.md || (echo 'README.md is out of date. Please run terraform-docs markdown . > README.md' && exit 1)"
+    plugins:
+      - docker#v3.8.0:
+          image: "quay.io/terraform-docs/terraform-docs:0.16.0"
+          workdir: "/code"
