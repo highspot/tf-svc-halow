@@ -73,9 +73,9 @@ data "aws_iam_policy_document" "kms_dynamodb_halow" {
 # DynamoDB Table
 ###############################################################################
 resource "aws_dynamodb_table" "halow" {
-  name           = local.table_name
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "id"
+  name         = local.table_name
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
 
   attribute {
     name = "id"
@@ -173,22 +173,6 @@ data "aws_iam_policy_document" "iam_assumable_role" {
       "kms:DescribeKey"
     ]
     resources = [aws_kms_key.dynamodb_halow.arn]
-  }
-
-  # CloudWatch Logs (optional, for application logging)
-  statement {
-    sid    = "CloudWatchLogs"
-    effect = "Allow"
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-      "logs:DescribeLogStreams",
-      "logs:DescribeLogGroups"
-    ]
-    resources = [
-      "arn:aws:logs:${var.aws_region}:${var.account_id}:log-group:/aws/eks/${var.cluster_name}/halow*"
-    ]
   }
 
   # AWS Secrets Manager access (for Secrets tab functionality)

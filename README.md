@@ -124,8 +124,9 @@ The created IAM role includes permissions for:
 
 - Full DynamoDB access to the created table
 - KMS key access for encryption/decryption
-- CloudWatch Logs access for application logging
 - AWS Secrets Manager read access for secret management functionality
+
+Note: CloudWatch Logs permissions are not included as the application runs in Kubernetes pods and logs to stdout, which is shipped to New Relic via the cluster's logging infrastructure.
 
 ## Security
 
