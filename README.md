@@ -125,6 +125,7 @@ The created IAM role includes permissions for:
 - Full DynamoDB access to the created table
 - KMS key access for encryption/decryption
 - CloudWatch Logs access for application logging
+- AWS Secrets Manager read access for secret management functionality
 
 ## Security
 

@@ -190,4 +190,18 @@ data "aws_iam_policy_document" "iam_assumable_role" {
       "arn:aws:logs:${var.aws_region}:${var.account_id}:log-group:/aws/eks/${var.cluster_name}/halow*"
     ]
   }
+
+  # AWS Secrets Manager access (for Secrets tab functionality)
+  statement {
+    sid    = "SecretsManagerAccess"
+    effect = "Allow"
+    actions = [
+      "secretsmanager:ListSecrets",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:GetSecretValue"
+    ]
+    resources = [
+      "arn:aws:secretsmanager:${var.aws_region}:${var.account_id}:secret:*"
+    ]
+  }
 }
