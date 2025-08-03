@@ -28,7 +28,7 @@ output "service_account_role_name" {
   value       = module.iam_assumable_role.iam_role_name
 }
 
-output "eso_service_account_role_arn" {
-  description = "ARN of the External Secrets Operator service account role"
-  value       = module.eso.eso_service_account_role_arn
+output "eso" {
+  description = "External Secrets Operator module outputs"
+  value       = module.eso
 }

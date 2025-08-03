@@ -67,6 +67,29 @@ data "aws_iam_policy_document" "kms_dynamodb_halow" {
       identifiers = ["dynamodb.amazonaws.com"]
     }
   }
+
+  # Add statement for halow service account to use the key
+  statement {
+    sid = "Allow Halow Service Account"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    resources = ["*"]
+    effect    = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = [module.iam_assumable_role.iam_role_arn]
+    }
+    
+    # Ensure service account can only use key via DynamoDB service
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["dynamodb.${var.aws_region}.amazonaws.com"]
+    }
+  }
 }
 
 ###############################################################################
