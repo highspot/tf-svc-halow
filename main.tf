@@ -199,13 +199,13 @@ data "aws_iam_policy_document" "iam_assumable_role" {
   }
 
   # AWS Secrets Manager access (for Secrets tab functionality)
+  # Only needs to list secrets and read metadata/tags, not actual secret values
   statement {
     sid    = "SecretsManagerAccess"
     effect = "Allow"
     actions = [
       "secretsmanager:ListSecrets",
-      "secretsmanager:DescribeSecret",
-      "secretsmanager:GetSecretValue"
+      "secretsmanager:DescribeSecret"
     ]
     resources = [
       "arn:aws:secretsmanager:${var.aws_region}:${var.account_id}:secret:*"
